@@ -1,3 +1,23 @@
+let sliderArray = Array.from(document.querySelectorAll('.slider__item')); // 0=4   5
+
+let current = 0;
+function rotate(counterDir) {
+  let newIndex = (current + counterDir) % sliderArray.length;
+  newIndex !== -1 ? newIndex : (newIndex = sliderArray.length - 1);
+  sliderArray[current].classList.toggle('slider__item_active');
+  sliderArray[newIndex].classList.toggle('slider__item_active');
+  current = newIndex;
+}
+
+let arrowPrev = document.querySelector('.slider__arrow_prev');
+let arrowNext = document.querySelector('.slider__arrow_next');
+arrowPrev.addEventListener('click', (e) => {
+  rotate(-1);
+});
+arrowNext.addEventListener('click', (e) => {
+  rotate(1);
+});
+
 
 let sliderArray = Array.from(document.querySelectorAll(".slider__item")); // 0=4   5
 let arrowPrev = document.querySelector(".slider__arrow_prev");
