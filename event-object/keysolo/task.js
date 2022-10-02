@@ -1,9 +1,9 @@
 class Game {
   constructor(container) {
     this.container = container;
-    this.wordElement = container.querySelector('.word');
-    this.winsElement = container.querySelector('.status__wins');
-    this.lossElement = container.querySelector('.status__loss');
+    this.wordElement = container.querySelector(".word");
+    this.winsElement = container.querySelector(".status__wins");
+    this.lossElement = container.querySelector(".status__loss");
 
     this.reset();
 
@@ -16,25 +16,30 @@ class Game {
     this.lossElement.textContent = 0;
   }
 
+  onKey = (e) => {
+    if (!this.currentSymbol) {
+      this.currentSymbol = document.querySelector(".symbol");
+    }
+    if (e.key === this.currentSymbol.textContent.toLowerCase()) {
+      this.success();
+    } else {
+      this.fail();
+    }
+  };
+
   registerEvents() {
-    /*
-      TODO:
-      Написать обработчик события, который откликается
-      на каждый введённый символ.
-      В случае правильного ввода слова вызываем this.success()
-      При неправильном вводе символа - this.fail();
-     */
+    document.addEventListener("keyup", this.onKey);
   }
 
   success() {
-    this.currentSymbol.classList.add('symbol_correct');
+    this.currentSymbol.classList.add("symbol_correct");
     this.currentSymbol = this.currentSymbol.nextElementSibling;
     if (this.currentSymbol !== null) {
       return;
     }
 
     if (++this.winsElement.textContent === 10) {
-      alert('Победа!');
+      alert("Победа!");
       this.reset();
     }
     this.setNewWord();
@@ -42,7 +47,7 @@ class Game {
 
   fail() {
     if (++this.lossElement.textContent === 5) {
-      alert('Вы проиграли!');
+      alert("Вы проиграли!");
       this.reset();
     }
     this.setNewWord();
@@ -56,17 +61,17 @@ class Game {
 
   getWord() {
     const words = [
-        'bob',
-        'awesome',
-        'netology',
-        'hello',
-        'kitty',
-        'rock',
-        'youtube',
-        'popcorn',
-        'cinema',
-        'love',
-        'javascript'
+        "bob",
+        "awesome",
+        "netology",
+        "hello",
+        "kitty",
+        "rock",
+        "youtube",
+        "popcorn",
+        "cinema",
+        "love",
+        "javascript",
       ],
       index = Math.floor(Math.random() * words.length);
 
@@ -77,14 +82,26 @@ class Game {
     const html = [...word]
       .map(
         (s, i) =>
-          `<span class="symbol ${i === 0 ? 'symbol_current': ''}">${s}</span>`
+          `<span class="symbol ${i === 0 ? "symbol_current" : ""}">${s}</span>`
       )
-      .join('');
+      .join("");
+
     this.wordElement.innerHTML = html;
 
-    this.currentSymbol = this.wordElement.querySelector('.symbol_current');
+    this.currentSymbol = this.wordElement.querySelector(".symbol_current");
   }
 }
 
-new Game(document.getElementById('game'))
+new Game(document.getElementById("game"));
 
+// Если игрок вводит не так слово, ему засчитываeтся поражение.
+// После 3 поражений игра заканчивается. Игрок побеждает после 10 побед.
+
+// Допишите метод *registerEvents*, в котором необходимо задать обработчик
+// нажатия клавиш. Принцип работы метода:
+
+// 1. Получить DOM-элемент текущего символа, который необходимо ввести (свойство *this.currentSymbol*)
+// 2. Получить символ, который был введён с клавиатуры.
+// 3. Если два символа одинаковые, вызывать метод *this.success*
+// 4. Если два символа отличаются, вызвать метод *this.fail*
+// 5. При сравнении регистр не должен быть важен (а или А)
